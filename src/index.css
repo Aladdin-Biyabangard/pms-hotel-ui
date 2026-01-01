@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OPERA Cloud Design System - Oracle Blue Professional Theme */
+
+@layer base {
+  :root {
+    /* Typography */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    
+    /* Core Colors - Light Mode - OPERA Cloud Style */
+    --background: 210 20% 98%;
+    --foreground: 210 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 30% 15%;
+
+    /* Oracle Blue Primary - OPERA Cloud Standard */
+    --primary: 210 100% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Professional Gray Secondary */
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 210 30% 15%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 210 15% 46%;
+
+    /* Oracle Blue Accent */
+    --accent: 210 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Status Colors - OPERA Cloud Standard */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 30% 15%;
+    
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 210 100% 40%;
+
+    --radius: 0.5rem;
+
+    /* Sidebar - OPERA Cloud Dark Professional */
+    --sidebar-background: 210 30% 12%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 210 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 18%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 30% 20%;
+    --sidebar-ring: 210 100% 50%;
+    --sidebar-muted: 210 30% 20%;
+
+    /* Chart Colors - Oracle Palette */
+    --chart-1: 210 100% 40%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 38 92% 50%;
+    --chart-5: 0 84% 60%;
+  }
+
+  .dark {
+    --background: 210 30% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 210 30% 11%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 210 30% 11%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 15%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 210 30% 15%;
+    --muted-foreground: 210 15% 60%;
+
+    --accent: 210 100% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 40%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 210 30% 15%;
+    
+    --info: 199 89% 48%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 210 30% 20%;
+    --input: 210 30% 20%;
+    --ring: 210 100% 50%;
+
+    --sidebar-background: 210 30% 6%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 210 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 15%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 30% 15%;
+    --sidebar-ring: 210 100% 50%;
+    --sidebar-muted: 210 30% 20%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-card/80 backdrop-blur-md border border-border/50;
+  }
+
+  .glass-dark {
+    @apply bg-card/60 backdrop-blur-lg border border-border/30;
+  }
+
+  .shadow-soft {
+    box-shadow: 0 2px 8px -2px hsl(var(--foreground) / 0.08),
+                0 4px 16px -4px hsl(var(--foreground) / 0.06);
+  }
+
+  .shadow-elevated {
+    box-shadow: 0 4px 12px -2px hsl(var(--foreground) / 0.1),
+                0 8px 24px -4px hsl(var(--foreground) / 0.08);
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(210 100% 45%));
+  }
+
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(var(--accent)), hsl(210 100% 55%));
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+}
