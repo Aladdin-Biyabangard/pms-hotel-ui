@@ -8,7 +8,7 @@ import {roomTypeApi, RoomTypeResponse} from "@/api/roomType";
 import {RatePlanResponse} from "@/api/ratePlan";
 import {roomRateApi, RoomRateResponse} from "@/api/roomRate";
 import {toast} from "sonner";
-import {ArrowLeft, Calendar, Edit, Plus} from "lucide-react";
+import {ArrowLeft, Calendar, Edit} from "lucide-react";
 import {Skeleton} from "@/components/ui/skeleton";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {format} from "date-fns";

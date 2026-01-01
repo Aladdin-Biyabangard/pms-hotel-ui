@@ -51,18 +51,18 @@ export const rateTierApi = {
   },
 
   getAllRateTiers: async (
-    page = 0,
-    size = 10,
-    params?: {
-      ratePlanId?: number;
-      minNights?: number;
-      maxNights?: number;
-      adjustmentType?: string;
-      minAdjustmentValue?: number;
-      maxAdjustmentValue?: number;
-      priority?: number;
-      status?: EntityStatus;
-    }
+      page = 0,
+      size = 10,
+      params?: {
+          ratePlanId: number;
+          minNights?: number;
+          maxNights?: number;
+          adjustmentType?: string;
+          minAdjustmentValue?: number;
+          maxAdjustmentValue?: number;
+          priority?: number;
+          status?: string
+      }
   ): Promise<CustomPage<RateTierResponse>> => {
     const response = await api.get<CustomPage<RateTierResponse>>('/rate-tiers', {
       params: {page, size, ...params}

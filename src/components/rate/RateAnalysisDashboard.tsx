@@ -40,7 +40,7 @@ import {
 import {roomRateApi, RoomRateResponse} from '@/api/roomRate';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
-import {rateOverrideApi, RateOverrideResponse} from '@/api/rateOverride';
+import {rateOverrideApi, RateOverrideResponse} from '@/modules/rate/RateOverride/api/rateOverride';
 import {toast} from 'sonner';
 import {cn} from '@/lib/utils';
 

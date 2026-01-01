@@ -1,5 +1,6 @@
 import {api} from './axios';
 import {EntityStatus} from '@/types/enums';
+
 export interface RoomTypeResponse {
   id: number;
   hotelId: number;

@@ -37,7 +37,7 @@
 // import {rateTypeApi, RateTypeResponse} from '@/api/rateType';
 // import {rateCategoryApi, RateCategoryResponse} from '@/api/rateCategory';
 // import {rateClassApi, RateClassResponse} from '@/api/rateClass';
-// import {CreateRateTierRequest, rateTierApi, RateTierResponse} from '@/api/rateTier';
+// import {CreateRateTierRequest, rateTierApi, RateTierResponse} from '@/modules/rateTiers/api/rateTiers.api';
 // import {
 //     COMPONENT_TYPES,
 //     CreateRatePackageComponentRequest,

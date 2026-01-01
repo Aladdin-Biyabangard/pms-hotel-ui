@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {PageWrapper} from "@/components/layout/PageWrapper";
 import {StatsCard} from "@/components/hotel";
@@ -7,37 +7,27 @@ import {Button} from "@/components/ui/button";
 import {ChartContainer, ChartTooltip, ChartTooltipContent} from "@/components/ui/chart";
 import {Badge} from "@/components/ui/badge";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
-import {Separator} from "@/components/ui/separator";
 import {
+    Activity,
+    AlertCircle,
     ArrowRight,
-    ArrowUp,
-    ArrowDown,
-    BedDouble,
+    BarChart3,
+    Cloud,
     DollarSign,
     GripVertical,
     Hotel,
+    Percent,
     Plus,
     Receipt,
     Settings,
-    Users,
-    X,
-    TrendingUp,
-    TrendingDown,
-    Calendar,
-    Clock,
-    CheckCircle,
-    AlertCircle,
     Sun,
-    Cloud,
-    MapPin,
-    Activity,
     Target,
-    Percent,
-    BarChart3,
-    PieChart
+    TrendingUp,
+    Users,
+    X
 } from "lucide-react";
 import {cn} from "@/lib/utils";
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, AreaChart, Area, PieChart as RechartsPieChart, Cell, BarChart, Bar} from "recharts";
+import {Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis} from "recharts";
 
 const Dashboard = () => {
   const navigate = useNavigate();

@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
 } from '@/components/ui/command';
-import { Button } from '@/components/ui/button';
-import { Search, Loader2 } from 'lucide-react';
+import {Button} from '@/components/ui/button';
+import {Loader2, Search} from 'lucide-react';
 
 // Common interface for items that can be searched
 export interface SearchableItem {

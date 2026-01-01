@@ -8,7 +8,7 @@ import {
     CommandList
 } from "@/components/ui/command";
 import {useNavigate} from "react-router-dom";
-import {BedDouble, Calendar, Hotel, Receipt, Users} from "lucide-react";
+import {BedDouble, Hotel, Receipt, Users} from "lucide-react";
 
 interface SearchResult {
   id: number;

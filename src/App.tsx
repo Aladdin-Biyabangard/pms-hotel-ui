@@ -43,17 +43,14 @@ import EditRoomType from "./pages/roomType/EditRoomType";
 import GroupManagementPage from "./pages/opera/GroupManagementPage";
 // Rate Management Pages
 import RateCalendar from "./pages/rate/RateCalendar";
-import RateTiers from "./pages/rate/RateTiers";
-import CreateRateTier from "./pages/rate/CreateRateTier";
-import EditRateTier from "./pages/rate/EditRateTier";
-import PackageComponents from "./pages/rate/PackageComponents";
-import CreatePackageComponent from "./pages/rate/CreatePackageComponent";
-import RateClassification from "./pages/rate/RateClassification";
-import CreateRateType from "./pages/rate/CreateRateType";
-import CreateRateCategory from "./pages/rate/CreateRateCategory";
-import CreateRateClass from "./pages/rate/CreateRateClass";
-import RateOverrides from "./pages/rate/RateOverrides";
-import CreateRateOverride from "./pages/rate/CreateRateOverride";
+import RateTiers from "./modules/rateTiers/pages/RateTiers";
+import CreateRateTier from "./modules/rateTiers/pages/CreateRateTier";
+import EditRateTier from "./modules/rateTiers/pages/EditRateTier";
+import PackageComponents from "./pages/rate_package/PackageComponents.tsx";
+import CreatePackageComponent from "./modules/package/pages/CreatePackageComponent";
+import EditPackageComponent from "./modules/package/pages/EditPackageComponent";
+import { RateClassification, CreateRateType, CreateRateCategory, CreateRateClass, EditRateType, EditRateCategory, EditRateClass } from "./modules/rate/Classification";
+import {CreateRateOverride, EditRateOverride, RateOverrides} from "./modules/rate/RateOverride";
 import BulkRateUpdate from "./pages/rate/BulkRateUpdate";
 import RateMatrix from "./pages/rate/RateMatrix";
 import AddDailyRate from "./pages/rate/AddDailyRate";
@@ -381,6 +378,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/rate-package-components/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditPackageComponent />
+                </ProtectedRoute>
+              }
+            />
             {/* Rate Classification */}
             <Route
               path="/rate-classification"
@@ -414,6 +419,30 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/rate-types/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditRateType />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rate-categories/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditRateCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rate-classes/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditRateClass />
+                </ProtectedRoute>
+              }
+            />
             {/* Pricing Rules */}
             <Route
               path="/pricing-rules"
@@ -437,6 +466,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <CreateRateOverride />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rate-overrides/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <EditRateOverride />
                 </ProtectedRoute>
               }
             />

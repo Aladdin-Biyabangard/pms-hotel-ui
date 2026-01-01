@@ -12,7 +12,7 @@ import {Checkbox} from '@/components/ui/checkbox';
 import {Textarea} from '@/components/ui/textarea';
 import {Card, CardContent} from '@/components/ui/card';
 import {Loader2, Save, X} from 'lucide-react';
-import {RatePlanRequest, ratePlanApi, RatePlanResponse,} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanRequest, RatePlanResponse,} from '@/api/ratePlan';
 import {rateTypeApi, RateTypeResponse} from '@/api/rateType';
 import {rateCategoryApi, RateCategoryResponse} from '@/api/rateCategory';
 import {rateClassApi, RateClassResponse} from '@/api/rateClass';

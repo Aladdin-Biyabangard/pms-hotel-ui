@@ -1,8 +1,5 @@
 export { default as RateCalendar } from './RateCalendar';
-export { default as RateTiers } from './RateTiers';
-export { default as CreateRateTier } from './CreateRateTier';
-export { default as EditRateTier } from './EditRateTier';
-export { default as PackageComponents } from './PackageComponents';
+export { default as PackageComponents } from '../rate_package/PackageComponents.tsx';
 export { default as CreatePackageComponent } from './CreatePackageComponent';
 export { default as RateClassification } from './RateClassification';
 export { default as CreateRateType } from './CreateRateType';

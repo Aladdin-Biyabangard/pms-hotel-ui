@@ -7,20 +7,17 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {
     Activity,
-    ArrowUpRight,
-    ArrowDownRight,
     BarChart3,
-    Calendar,
     DollarSign,
     Package,
     RefreshCw,
     Target,
-    TrendingUp,
     TrendingDown,
+    TrendingUp,
     Users,
     Zap
 } from 'lucide-react';
-import {format, subDays, parseISO, differenceInDays} from 'date-fns';
+import {differenceInDays, format, parseISO, subDays} from 'date-fns';
 import {ratePackageComponentApi, RatePackageComponentResponse} from '@/api/ratePackageComponent';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
 import {roomRateApi, RoomRateResponse} from '@/api/roomRate';

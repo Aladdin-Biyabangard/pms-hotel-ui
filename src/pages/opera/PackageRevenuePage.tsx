@@ -1,4 +1,4 @@
-import { PackageRevenueAnalytics } from "@/components/rate/PackageRevenueAnalytics";
+import {PackageRevenueAnalytics} from "@/components/rate/PackageRevenueAnalytics";
 
 export default function PackageRevenuePage() {
   return (

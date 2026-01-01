@@ -1,4 +1,4 @@
-import { PackagePerformanceDashboard } from "@/components/rate/PackagePerformanceDashboard";
+import {PackagePerformanceDashboard} from "@/components/rate/PackagePerformanceDashboard";
 
 export default function PackagePerformancePage() {
   return (

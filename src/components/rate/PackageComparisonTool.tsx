@@ -2,30 +2,14 @@ import {useEffect, useMemo, useState} from 'react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Badge} from '@/components/ui/badge';
-import {Checkbox} from '@/components/ui/checkbox';
 import {Progress} from '@/components/ui/progress';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
-import {
-    ArrowUpRight,
-    ArrowDownRight,
-    BarChart3,
-    CheckCircle,
-    Scale,
-    DollarSign,
-    Minus,
-    Package,
-    Plus,
-    RefreshCw,
-    Target,
-    TrendingUp,
-    TrendingDown,
-    X
-} from 'lucide-react';
+import {ArrowDownRight, ArrowUpRight, CheckCircle, Minus, Package, Plus, RefreshCw, Scale, Target} from 'lucide-react';
 import {format, subDays} from 'date-fns';
 import {ratePackageComponentApi, RatePackageComponentResponse} from '@/api/ratePackageComponent';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
-import {roomRateApi, RoomRateResponse} from '@/api/roomRate';
+import {roomRateApi} from '@/api/roomRate';
 import {toast} from 'sonner';
 import {cn} from '@/lib/utils';
 

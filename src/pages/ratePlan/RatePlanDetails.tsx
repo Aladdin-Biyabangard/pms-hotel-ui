@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { PageWrapper } from "@/components/layout/PageWrapper";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ratePlanApi, RatePlanResponse } from "@/api/ratePlan";
-import { roomTypeApi, RoomTypeResponse } from "@/api/roomType";
-import { toast } from "sonner";
-import { ArrowLeft, Calendar, Edit, Link2 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { format } from "date-fns";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
+import {PageWrapper} from "@/components/layout/PageWrapper";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {ratePlanApi, RatePlanResponse} from "@/api/ratePlan";
+import {roomTypeApi, RoomTypeResponse} from "@/api/roomType";
+import {toast} from "sonner";
+import {ArrowLeft, Calendar, Edit, Link2} from "lucide-react";
+import {Skeleton} from "@/components/ui/skeleton";
+import {format} from "date-fns";
 
 export default function RatePlanDetails() {
     const { id } = useParams<{ id: string }>();

@@ -14,12 +14,11 @@ import {
     Package,
     Plus,
     RefreshCw,
-    Settings,
     TrendingUp
 } from 'lucide-react';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
 import {roomRateApi, RoomRateResponse} from '@/api/roomRate';
-import {rateOverrideApi} from '@/api/rateOverride';
+import {rateOverrideApi} from '@/modules/rate/RateOverride/api/rateOverride';
 import {toast} from 'sonner';
 import {format, isAfter, isBefore} from 'date-fns';
 import {cn} from '@/lib/utils';
