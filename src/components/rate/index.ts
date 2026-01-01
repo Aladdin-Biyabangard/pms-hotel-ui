@@ -25,7 +25,6 @@ export { DateRangeSelector } from './DateRangeSelector';
 
 // Enhanced Oracle OPERA Style Components
 export { RateMatrixViewEnhanced } from './RateMatrixViewEnhanced';
-export { RatePlanFormEnhanced } from './RatePlanFormEnhanced';
 export { BulkRateOperations } from './BulkRateOperations';
 export { RateTierManagement } from './RateTierManagement';
 export { RatePackageComponentManagement } from './RatePackageComponentManagement';
