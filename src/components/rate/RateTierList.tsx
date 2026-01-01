@@ -4,7 +4,7 @@ import {Button} from '@/components/ui/button';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Badge} from '@/components/ui/badge';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
-import {ArrowDown, ArrowUp, Edit, Plus, Trash2} from 'lucide-react';
+import {ArrowDown, ArrowUp, ChevronLeft, ChevronRight, Edit, Plus, Trash2} from 'lucide-react';
 import {rateTierApi, RateTierResponse} from '@/api/rateTier';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
 import {toast} from 'sonner';
@@ -31,18 +31,32 @@ export function RateTierList({
   const [ratePlans, setRatePlans] = useState<RatePlanResponse[]>([]);
   const [isReordering, setIsReordering] = useState(false);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10); // Fixed size of 10 tiers per page
+  const [hasNext, setHasNext] = useState(true);
+
   useEffect(() => {
     loadInitialData();
   }, []);
 
   useEffect(() => {
     if (selectedRatePlan) {
+      setCurrentPage(0); // Reset to first page when rate plan changes
       loadTiers();
     } else {
       setTiers([]);
       setSortedTiers([]);
+      setCurrentPage(0);
+      setHasNext(true);
     }
   }, [selectedRatePlan]);
+
+  useEffect(() => {
+    if (selectedRatePlan && currentPage >= 0) {
+      loadTiers();
+    }
+  }, [currentPage, pageSize]);
 
   useEffect(() => {
     // Sort tiers by priority
@@ -64,10 +78,11 @@ export function RateTierList({
 
     setIsLoading(true);
     try {
-      const data = await rateTierApi.getAllRateTiers(0, 1000, {
+      const data = await rateTierApi.getAllRateTiers(currentPage, pageSize, {
         ratePlanId: selectedRatePlan
       });
       setTiers(data.content);
+      setHasNext(data.content.length === pageSize);
     } catch (error) {
       console.error('Failed to load rate tiers', error);
       toast.error('Failed to load rate tiers');
@@ -178,7 +193,7 @@ export function RateTierList({
           <div>
             <CardTitle>Rate Tiers</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              {sortedTiers.length} tier(s) for selected rate plan
+              {selectedRatePlan ? `${sortedTiers.length} tier(s) for selected rate plan` : 'Select a rate plan to view tiers'}
             </p>
           </div>
           <div className="flex gap-2">
@@ -197,12 +212,12 @@ export function RateTierList({
                 </SelectContent>
               </Select>
             )}
-            {/*{onCreate && selectedRatePlan && (*/}
-            {/*  <Button onClick={onCreate} className="w-full sm:w-auto">*/}
-            {/*    <Plus className="h-4 w-4 mr-2" />*/}
-            {/*    */}
-            {/*  </Button>*/}
-            {/*)}*/}
+            {onCreate && selectedRatePlan && (
+              <Button onClick={onCreate} className="w-full sm:w-auto">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Tier
+              </Button>
+            )}
           </div>
         </div>
       </CardHeader>
@@ -316,6 +331,35 @@ export function RateTierList({
                 })}
               </TableBody>
             </Table>
+
+            {/* Pagination */}
+            {tiers.length > 0 && (
+              <div className="flex items-center justify-between mt-4">
+                <div className="text-sm text-muted-foreground">
+                  Page {currentPage + 1}
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={currentPage === 0 || isLoading}
+                    onClick={() => setCurrentPage(p => Math.max(0, p - 1))}
+                  >
+                    Previous
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={!hasNext || isLoading}
+                    onClick={() => setCurrentPage(p => p + 1)}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </CardContent>
