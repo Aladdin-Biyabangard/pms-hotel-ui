@@ -16,7 +16,7 @@ import {
     RatePackageComponentResponse,
     UpdateRatePackageComponentRequest
 } from '../api/packageComponents.api';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {toast} from 'sonner';
 
 const packageComponentSchema = z.object({

@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import {PageWrapper} from '@/components/layout/PageWrapper';
 import {Button} from '@/components/ui/button';
-import {RateCalendarMatrixView} from '@/components/rate/RateCalendarMatrixView';
+import {RateCalendarMatrixView} from '@/modules/rate/RatePlan';
 import {ArrowLeft, Plus} from 'lucide-react';
 
 export default function RateCalendar() {

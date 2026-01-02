@@ -3,7 +3,7 @@ import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Plus} from 'lucide-react';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {toast} from 'sonner';
 
 // Import our custom hooks

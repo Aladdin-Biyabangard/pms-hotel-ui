@@ -1,4 +1,4 @@
-import {PackageComparisonTool} from "@/components/rate/PackageComparisonTool";
+import {PackageComparisonTool} from "@/modules/rate";
 
 export default function PackageComparisonPage() {
   return (

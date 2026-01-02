@@ -10,7 +10,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {Textarea} from '@/components/ui/textarea';
 import {Button} from '@/components/ui/button';
 import {CreateRateOverrideRequest, rateOverrideApi, RateOverrideResponse} from '../../api/rateOverride';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
 

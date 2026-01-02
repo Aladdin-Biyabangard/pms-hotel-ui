@@ -7,7 +7,7 @@ import {Badge} from '@/components/ui/badge';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Edit, Eye, Filter, Plus, Search, Trash2} from 'lucide-react';
 import {rateOverrideApi, RateOverrideResponse} from '../../api/rateOverride';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
 import {format} from 'date-fns';

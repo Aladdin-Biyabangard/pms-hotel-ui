@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 import {roomTypeApi, RoomTypeResponse} from "@/api/roomType";
-import {RatePlanResponse} from "@/api/ratePlan";
+import {RatePlanResponse} from "@/modules/rate/RatePlan";
 import {roomRateApi, RoomRateResponse} from "@/api/roomRate";
 import {toast} from "sonner";
 import {ArrowLeft, Calendar, Edit} from "lucide-react";

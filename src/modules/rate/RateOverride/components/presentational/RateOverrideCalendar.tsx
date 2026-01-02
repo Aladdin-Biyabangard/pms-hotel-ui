@@ -56,7 +56,7 @@ import {
     RateOverrideResponse,
     UpdateRateOverrideRequest
 } from '../../api/rateOverride';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
 import {cn} from '@/lib/utils';

@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import {PageWrapper} from '@/components/layout/PageWrapper';
 import {Button} from '@/components/ui/button';
-import {BulkRateOperations} from '@/components/rate/BulkRateOperations';
+import {BulkRateOperations} from '@/modules/rate';
 import {ArrowLeft} from 'lucide-react';
 
 export default function BulkRateUpdate() {

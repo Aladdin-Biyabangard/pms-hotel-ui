@@ -15,24 +15,23 @@ import {
     startOfWeek,
     subMonths
 } from 'date-fns';
-import {rateOverrideApi, RateOverrideResponse} from '../../api/rateOverride';
-import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
+import {roomRateApi, RoomRateResponse} from '@/api/roomRate';
+import {ratePlanApi, RatePlanResponse} from '../..';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
-import {cn} from '@/lib/utils';
 
-interface OverrideCalendarViewProps {
-  onEditOverride?: (override: RateOverrideResponse) => void;
-  onDateClick?: (date: Date, override?: RateOverrideResponse) => void;
+interface RateCalendarViewProps {
+  onEditRate?: (rate: RoomRateResponse) => void;
+  onDateClick?: (date: Date, rate?: RoomRateResponse) => void;
 }
 
-export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCalendarViewProps) {
+export function RateCalendarView({ onEditRate, onDateClick }: RateCalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedRatePlan, setSelectedRatePlan] = useState<number | null>(null);
   const [selectedRoomType, setSelectedRoomType] = useState<number | null>(null);
   const [ratePlans, setRatePlans] = useState<RatePlanResponse[]>([]);
   const [roomTypes, setRoomTypes] = useState<RoomTypeResponse[]>([]);
-  const [overrides, setOverrides] = useState<Map<string, RateOverrideResponse[]>>(new Map());
+  const [rates, setRates] = useState<Map<string, RoomRateResponse>>(new Map());
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -40,10 +39,10 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
   }, []);
 
   useEffect(() => {
-    if (selectedRatePlan) {
-      loadOverrides();
+    if (selectedRatePlan && selectedRoomType) {
+      loadRates();
     } else {
-      setOverrides(new Map());
+      setRates(new Map());
     }
   }, [currentDate, selectedRatePlan, selectedRoomType]);
 
@@ -60,41 +59,33 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
     }
   };
 
-  const loadOverrides = async () => {
-    if (!selectedRatePlan) return;
+  const loadRates = async () => {
+    if (!selectedRatePlan || !selectedRoomType) return;
     
     setIsLoading(true);
     try {
       const startDate = format(startOfMonth(currentDate), 'yyyy-MM-dd');
       const endDate = format(endOfMonth(currentDate), 'yyyy-MM-dd');
       const ratePlan = ratePlans.find(rp => rp.id === selectedRatePlan);
+      const roomType = roomTypes.find(rt => rt.id === selectedRoomType);
       
-      if (!ratePlan) return;
+      if (!ratePlan || !roomType) return;
 
-      const params: any = {
-        ratePlanId: selectedRatePlan,
+      const data = await roomRateApi.getAllRoomRates(0, 1000, {
+        ratePlanCode: ratePlan.code,
+        roomTypeCode: roomType.code,
         startDate,
         endDate
-      };
-
-      if (selectedRoomType) {
-        params.roomTypeId = selectedRoomType;
-      }
-
-      const data = await rateOverrideApi.getAllRateOverrides(0, 1000, params);
-
-      const overridesMap = new Map<string, RateOverrideResponse[]>();
-      data.content.forEach(override => {
-        const key = format(new Date(override.overrideDate), 'yyyy-MM-dd');
-        if (!overridesMap.has(key)) {
-          overridesMap.set(key, []);
-        }
-        overridesMap.get(key)!.push(override);
       });
 
-      setOverrides(overridesMap);
+      const ratesMap = new Map<string, RoomRateResponse>();
+      data.content.forEach(rate => {
+        const key = format(new Date(rate.rateDate), 'yyyy-MM-dd');
+        ratesMap.set(key, rate);
+      });
+      setRates(ratesMap);
     } catch (error) {
-      toast.error('Failed to load overrides');
+      toast.error('Failed to load rates');
     } finally {
       setIsLoading(false);
     }
@@ -108,12 +99,12 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
 
   const handleDateClick = (date: Date) => {
     const dateKey = format(date, 'yyyy-MM-dd');
-    const dateOverrides = overrides.get(dateKey);
+    const rate = rates.get(dateKey);
     
     if (onDateClick) {
-      onDateClick(date, dateOverrides?.[0]);
-    } else if (dateOverrides && dateOverrides.length > 0 && onEditOverride) {
-      onEditOverride(dateOverrides[0]);
+      onDateClick(date, rate);
+    } else if (rate && onEditRate) {
+      onEditRate(rate);
     }
   };
 
@@ -121,26 +112,11 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
     return date.getMonth() === currentDate.getMonth();
   };
 
-  const getOverrideTypeColor = (type: string) => {
-    switch (type) {
-      case 'FIXED':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'PERCENTAGE':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'DISCOUNT':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'SURCHARGE':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
         <div className="flex flex-col gap-4">
-          <CardTitle>Override Calendar</CardTitle>
+          <CardTitle>Rate Calendar</CardTitle>
           <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-4">
             <Select 
               value={selectedRatePlan?.toString() || ''} 
@@ -157,14 +133,13 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
             </Select>
             
             <Select 
-              value={selectedRoomType?.toString() || '_all_'} 
-              onValueChange={(v) => setSelectedRoomType(v === '_all_' ? null : parseInt(v))}
+              value={selectedRoomType?.toString() || ''} 
+              onValueChange={(v) => setSelectedRoomType(v ? parseInt(v) : null)}
             >
               <SelectTrigger className="w-full sm:w-[200px]">
-                <SelectValue placeholder="All Room Types" />
+                <SelectValue placeholder="Select Room Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="_all_">All Room Types</SelectItem>
                 {roomTypes.map(rt => (
                   <SelectItem key={rt.id} value={rt.id.toString()}>{rt.name}</SelectItem>
                 ))}
@@ -187,10 +162,10 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
       </CardHeader>
       <CardContent>
         {isLoading ? (
-          <div className="text-center py-8 text-muted-foreground">Loading overrides...</div>
-        ) : !selectedRatePlan ? (
+          <div className="text-center py-8 text-muted-foreground">Loading rates...</div>
+        ) : !selectedRatePlan || !selectedRoomType ? (
           <div className="text-center py-8 text-muted-foreground">
-            Please select a rate plan to view overrides
+            Please select a rate plan and room type to view rates
           </div>
         ) : (
           <>
@@ -202,55 +177,47 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
               ))}
               {days.map(day => {
                 const dateKey = format(day, 'yyyy-MM-dd');
-                const dateOverrides = overrides.get(dateKey) || [];
+                const rate = rates.get(dateKey);
                 const isToday = isSameDay(day, new Date());
                 const isCurrentMonthDay = isCurrentMonth(day);
 
                 return (
                   <div
                     key={dateKey}
-                    className={cn(
-                      "border rounded p-1 sm:p-2 min-h-[60px] sm:min-h-[100px] cursor-pointer transition-colors",
-                      isCurrentMonthDay ? 'bg-background hover:bg-accent' : 'bg-muted/30 opacity-50',
-                      isToday && 'border-blue-500 border-2',
-                      dateOverrides.length > 0 && isCurrentMonthDay && 'bg-yellow-50 dark:bg-yellow-950/20'
-                    )}
+                    className={`
+                      border rounded p-1 sm:p-2 min-h-[60px] sm:min-h-[100px] cursor-pointer transition-colors
+                      ${isCurrentMonthDay ? 'bg-background hover:bg-accent' : 'bg-muted/30 opacity-50'}
+                      ${isToday ? 'border-blue-500 border-2' : ''}
+                    `}
                     onClick={() => handleDateClick(day)}
                   >
-                    <div className={cn(
-                      "text-[10px] sm:text-xs font-medium mb-1",
-                      !isCurrentMonthDay && 'text-muted-foreground'
-                    )}>
+                    <div className={`text-[10px] sm:text-xs font-medium mb-1 ${isCurrentMonthDay ? '' : 'text-muted-foreground'}`}>
                       {format(day, 'd')}
                     </div>
-                    {dateOverrides.length > 0 && isCurrentMonthDay ? (
+                    {rate && isCurrentMonthDay ? (
                       <div className="space-y-0.5 sm:space-y-1">
-                        {dateOverrides.slice(0, 2).map((override, idx) => (
-                          <div
-                            key={override.id}
-                            className={cn(
-                              "text-[8px] sm:text-[10px] px-1 py-0.5 rounded truncate",
-                              getOverrideTypeColor(override.overrideType)
-                            )}
-                            title={`${override.overrideType}: ${override.overrideType === 'PERCENTAGE' ? `${override.overrideValue}%` : `$${override.overrideValue.toFixed(2)}`}${override.roomTypeName ? ` - ${override.roomTypeName}` : ''}`}
-                          >
-                            {override.overrideType === 'PERCENTAGE' 
-                              ? `${override.overrideValue}%`
-                              : `$${override.overrideValue.toFixed(0)}`
-                            }
-                            {override.roomTypeName && (
-                              <span className="text-[7px] opacity-75"> {override.roomTypeName.substring(0, 3)}</span>
-                            )}
-                          </div>
-                        ))}
-                        {dateOverrides.length > 2 && (
+                        <div className="text-[10px] sm:text-xs font-semibold text-green-600">
+                          ${rate.rateAmount.toFixed(2)}
+                        </div>
+                        <div className="flex flex-wrap gap-0.5 sm:gap-1">
+                          {rate.stopSell && (
+                            <Badge variant="destructive" className="text-[8px] sm:text-[10px] px-0.5 sm:px-1 py-0">Stop</Badge>
+                          )}
+                          {rate.closedForArrival && (
+                            <Badge variant="secondary" className="text-[8px] sm:text-[10px] px-0.5 sm:px-1 py-0">C/A</Badge>
+                          )}
+                          {rate.closedForDeparture && (
+                            <Badge variant="secondary" className="text-[8px] sm:text-[10px] px-0.5 sm:px-1 py-0">C/D</Badge>
+                          )}
+                        </div>
+                        {rate.availabilityCount !== undefined && (
                           <div className="text-[8px] sm:text-[10px] text-muted-foreground">
-                            +{dateOverrides.length - 2} more
+                            Avail: {rate.availabilityCount}
                           </div>
                         )}
                       </div>
                     ) : isCurrentMonthDay ? (
-                      <div className="text-[10px] sm:text-xs text-muted-foreground">No override</div>
+                      <div className="text-[10px] sm:text-xs text-muted-foreground">No rate</div>
                     ) : null}
                   </div>
                 );
@@ -262,16 +229,16 @@ export function OverrideCalendarView({ onEditOverride, onDateClick }: OverrideCa
                 <span>Today</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-yellow-50 dark:bg-yellow-950/20 border rounded"></div>
-                <span>Has Override</span>
+                <Badge variant="destructive" className="text-[10px] px-1 py-0">Stop</Badge>
+                <span>Stop Sell</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 text-[10px] px-1 py-0">Fixed</Badge>
-                <span>Fixed Amount</span>
+                <Badge variant="secondary" className="text-[10px] px-1 py-0">C/A</Badge>
+                <span>Closed for Arrival</span>
               </div>
               <div className="flex items-center gap-2">
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-[10px] px-1 py-0">%</Badge>
-                <span>Percentage</span>
+                <Badge variant="secondary" className="text-[10px] px-1 py-0">C/D</Badge>
+                <span>Closed for Departure</span>
               </div>
             </div>
           </>

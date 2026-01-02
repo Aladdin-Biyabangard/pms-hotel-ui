@@ -2,7 +2,7 @@ import {useNavigate, useSearchParams} from 'react-router-dom';
 import {PageWrapper} from '@/components/layout/PageWrapper';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
-import {RoomRateForm} from '@/components/rate/RoomRateForm';
+import {RoomRateForm} from '@/modules/rate/RatePlan';
 import {ArrowLeft, DollarSign} from 'lucide-react';
 
 export default function AddDailyRate() {

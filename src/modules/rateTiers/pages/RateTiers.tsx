@@ -6,7 +6,7 @@ import {Card, CardContent} from '@/components/ui/card.tsx';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select.tsx';
 import {RateTiersList} from '../RateTiersList';
 import {ArrowLeft, Layers, Plus} from 'lucide-react';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan.ts';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {toast} from 'sonner';
 
 export default function RateTiers() {

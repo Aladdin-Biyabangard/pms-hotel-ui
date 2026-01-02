@@ -9,7 +9,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/c
 import {Button} from '@/components/ui/button';
 import {toast} from 'sonner';
 import {CreateRateTierRequest, RateTierResponse, rateTiersApi, UpdateRateTierRequest} from '../api/rateTiers.api';
-import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan';
+import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 
 const rateTierSchema = z.object({
     ratePlanId: z.number().min(1, 'Rate plan is required'),
