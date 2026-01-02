@@ -3,6 +3,7 @@ import { PageWrapper } from '@/components/layout/PageWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Tag } from 'lucide-react';
+import { RateTypeForm } from '../../components/forms/RateTypeForm';
 
 export default function CreateRateType() {
   const navigate = useNavigate();
@@ -33,10 +34,11 @@ export default function CreateRateType() {
             </div>
           </CardHeader>
           <CardContent>
-            {/* RateTypeForm will be implemented */}
-            <div className="text-center py-8 text-muted-foreground">
-              Rate Type Form component coming soon...
-            </div>
+            <RateTypeForm
+              open={true}
+              onClose={() => navigate('/rate-classification')}
+              onSuccess={() => navigate('/rate-classification')}
+            />
           </CardContent>
         </Card>
       </div>

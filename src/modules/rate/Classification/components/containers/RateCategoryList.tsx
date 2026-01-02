@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Edit, Filter, Plus, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { RateCategoryResponse } from '../../api/rateCategory.api';
+import { RateCategoryResponse, rateCategoriesApi } from '../../api/rateCategory.api';
 import { useRateCategories } from '../../hooks/useRateCategories';
 import { useRateCategoryFilters } from '../../hooks/useRateCategoryFilters';
 
@@ -26,9 +26,11 @@ export function RateCategoryList({ onEdit, onDelete, onCreate }: RateCategoryLis
     }
 
     try {
-      // Use the delete method from the hook (this will be implemented)
-      // For now, we'll call loadRateCategories to refresh
-      // loadRateCategories();
+      await rateCategoriesApi.delete(rateCategory.id);
+      toast.success('Rate category deleted successfully');
+      // Refresh the data
+      const response = await rateCategoriesApi.getAll(0, 1000);
+      setRateCategories(response.content);
       onDelete?.(rateCategory);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete rate category');

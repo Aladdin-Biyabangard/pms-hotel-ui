@@ -2,6 +2,7 @@
 export { PackageComponentList } from './PackageComponentList';
 
 // Page exports
+export { default as PackageComponents } from './pages/PackageComponents';
 export { default as CreatePackageComponent } from './pages/CreatePackageComponent';
 export { default as EditPackageComponent } from './pages/EditPackageComponent';
 

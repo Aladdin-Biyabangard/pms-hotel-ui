@@ -3,6 +3,7 @@ import { PageWrapper } from '@/components/layout/PageWrapper';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Tag } from 'lucide-react';
+import { RateClassForm } from '../../components/forms/RateClassForm';
 
 export default function CreateRateClass() {
   const navigate = useNavigate();
@@ -33,9 +34,11 @@ export default function CreateRateClass() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-center py-8 text-muted-foreground">
-              Rate Class Form component coming soon...
-            </div>
+            <RateClassForm
+              open={true}
+              onClose={() => navigate('/rate-classification')}
+              onSuccess={() => navigate('/rate-classification')}
+            />
           </CardContent>
         </Card>
       </div>

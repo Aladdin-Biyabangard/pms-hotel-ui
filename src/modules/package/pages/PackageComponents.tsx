@@ -4,7 +4,7 @@ import {PageWrapper} from '@/components/layout/PageWrapper.tsx';
 import {Button} from '@/components/ui/button.tsx';
 import {Card, CardContent} from '@/components/ui/card.tsx';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select.tsx';
-import {PackageComponentList} from '@/modules/package';
+import {PackageComponentList} from '../PackageComponentList';
 import {ArrowLeft, Package, Plus} from 'lucide-react';
 import {ratePlanApi, RatePlanResponse} from '@/api/ratePlan.ts';
 import {toast} from 'sonner';
@@ -97,4 +97,3 @@ export default function PackageComponents() {
     </PageWrapper>
   );
 }
-

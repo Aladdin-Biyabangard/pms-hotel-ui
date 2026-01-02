@@ -46,7 +46,7 @@ import RateCalendar from "./pages/rate/RateCalendar";
 import RateTiers from "./modules/rateTiers/pages/RateTiers";
 import CreateRateTier from "./modules/rateTiers/pages/CreateRateTier";
 import EditRateTier from "./modules/rateTiers/pages/EditRateTier";
-import PackageComponents from "./pages/rate_package/PackageComponents.tsx";
+import { PackageComponents } from "./modules/package";
 import CreatePackageComponent from "./modules/package/pages/CreatePackageComponent";
 import EditPackageComponent from "./modules/package/pages/EditPackageComponent";
 import { RateClassification, CreateRateType, CreateRateCategory, CreateRateClass, EditRateType, EditRateCategory, EditRateClass } from "./modules/rate/Classification";

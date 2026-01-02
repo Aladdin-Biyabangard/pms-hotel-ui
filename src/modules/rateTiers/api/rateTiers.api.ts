@@ -1,5 +1,4 @@
 import {CreateRateTierRequest, CustomPage, rateTierApi, RateTierResponse, UpdateRateTierRequest} from '@/api/rateTier';
-
 // Re-export types for convenience within the rate tiers module
 export type { RateTierResponse, CreateRateTierRequest, UpdateRateTierRequest, CustomPage };
 

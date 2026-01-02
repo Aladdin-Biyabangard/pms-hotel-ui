@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Edit, Filter, Plus, Search, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { RateTypeResponse } from '../../api/rateType.api';
+import { RateTypeResponse, rateTypesApi } from '../../api/rateType.api';
 import { useRateTypes } from '../../hooks/useRateTypes';
 import { useRateTypeFilters } from '../../hooks/useRateTypeFilters';
 
@@ -26,9 +26,11 @@ export function RateTypeList({ onEdit, onDelete, onCreate }: RateTypeListProps) 
     }
 
     try {
-      // Use the delete method from the hook (this will be implemented)
-      // For now, we'll call loadRateTypes to refresh
-      // loadRateTypes();
+      await rateTypesApi.delete(rateType.id);
+      toast.success('Rate type deleted successfully');
+      // Refresh the data
+      const response = await rateTypesApi.getAll(0, 1000);
+      setRateTypes(response.content);
       onDelete?.(rateType);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete rate type');

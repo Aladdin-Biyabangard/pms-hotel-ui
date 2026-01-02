@@ -14,6 +14,11 @@ export { RateTypeList } from './components/containers/RateTypeList';
 export { RateCategoryList } from './components/containers/RateCategoryList';
 export { RateClassList } from './components/containers/RateClassList';
 
+// Form components
+export { RateTypeForm } from './components/forms/RateTypeForm';
+export { RateCategoryForm } from './components/forms/RateCategoryForm';
+export { RateClassForm } from './components/forms/RateClassForm';
+
 // Management components
 export { RateClassificationManagement } from './components/RateClassificationManagement';
 
