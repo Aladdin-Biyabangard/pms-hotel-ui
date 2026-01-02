@@ -24,7 +24,8 @@ export function CapacitySection({control}: CapacitySectionProps) {
                 type="number"
                 placeholder="2"
                 {...field}
-                onChange={(e) => field.onChange(parseInt(e.target.value, 10) || 1)}
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : 1)}
               />
             </FormControl>
             <FormDescription>Total maximum number of guests</FormDescription>

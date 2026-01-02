@@ -126,7 +126,8 @@ export function BasicInfoSection({ control }: BasicInfoSectionProps) {
                 type="number"
                 placeholder="1"
                 {...field}
-                onChange={(e) => field.onChange(parseInt(e.target.value, 10) || 0)}
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : 0)}
               />
             </FormControl>
             <FormMessage />

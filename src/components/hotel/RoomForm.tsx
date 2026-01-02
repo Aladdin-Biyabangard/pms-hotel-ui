@@ -17,6 +17,7 @@ import {RestrictionsSection} from './room/RestrictionsSection';
 import {FeaturesSection} from './room/FeaturesSection';
 import {StatusSection} from './room/StatusSection';
 import {AdditionalInfoSection} from './room/AdditionalInfoSection';
+import {CustomAmenitiesSection} from './room/CustomAmenitiesSection';
 
 const roomSchema = z.object({
     // Basic Information
@@ -70,6 +71,7 @@ const roomSchema = z.object({
     wheelchairAccessible: z.boolean().optional(),
     elevatorAccess: z.boolean().optional(),
     amenities: z.array(z.string()).optional(),
+    customAmenities: z.array(z.string()).optional(),
     
     // Status & Maintenance
     roomStatus: z.nativeEnum(RoomStatus).optional(),
@@ -101,60 +103,142 @@ export const RoomForm: React.FC<RoomFormProps> = ({room, onSuccess, onCancel}) =
     const form = useForm<RoomFormValues>({
         resolver: zodResolver(roomSchema),
         defaultValues: {
-            roomNumber: room?.roomNumber || '',
-            roomType: room?.roomType || '', // Dynamic room type code
-            floor: room?.floor || 0,
-            bedCount: room?.bedCount || 1,
-            occupancy: room?.occupancy || 1,
-            area: room?.area,
-            maxAdults: room?.maxAdults,
-            maxChildren: room?.maxChildren,
-            viewType: room?.viewType || '',
-            smokingAllowed: room?.smokingAllowed ?? false,
+            // Basic Information
+            roomNumber: room?.roomNumber ?? '',
+            roomType: room?.roomType ?? '', // Dynamic room type code
+            roomCategory: room?.roomCategory ?? '',
+            floor: room?.floor ?? 0,
+            wing: room?.wing ?? '',
+            section: room?.section ?? '',
+            building: room?.building ?? '',
+
+            // Physical Attributes
+            area: room?.area ?? undefined,
+            areaUnit: room?.areaUnit ?? 'sqm',
+            bedCount: room?.bedCount ?? 1,
+            bedType: room?.bedType ?? '',
+            bedConfiguration: room?.bedConfiguration ?? '',
+            viewType: room?.viewType ?? '',
+            balcony: room?.balcony ?? false,
+            terrace: room?.terrace ?? false,
+            connectingRoom: room?.connectingRoom ?? 'None',
+            connectingRoomNumber: room?.connectingRoomNumber ?? '',
+
+            // Capacity
+            occupancy: room?.occupancy ?? 1,
+            maxAdults: room?.maxAdults ?? undefined,
+            maxChildren: room?.maxChildren ?? undefined,
+            maxInfants: room?.maxInfants ?? undefined,
             extraBedAvailable: room?.extraBedAvailable ?? false,
-            extraBedPrice: room?.extraBedPrice,
-            minStayNights: room?.minStayNights,
-            maxStayNights: room?.maxStayNights,
-            weekendPricePerNight: room?.weekendPricePerNight,
-            seasonalPricePerNight: room?.seasonalPricePerNight,
-            wheelchairAccessible: room?.wheelchairAccessible ?? false,
-            description: room?.description || '',
-            maintenanceNotes: room?.maintenanceNotes || '',
-            amenities: room?.amenities || [],
-            roomStatus: (room?.roomStatus as RoomStatus) || undefined,
+            extraBedCount: room?.extraBedCount ?? undefined,
+            extraBedPrice: room?.extraBedPrice ?? undefined,
+            cribAvailable: room?.cribAvailable ?? false,
+            cribPrice: room?.cribPrice ?? undefined,
+
+            // Pricing
+            pricePerNight: room?.pricePerNight ?? 0,
+            weekendPricePerNight: room?.weekendPricePerNight ?? undefined,
+            seasonalPricePerNight: room?.seasonalPricePerNight ?? undefined,
+            holidayPricePerNight: room?.holidayPricePerNight ?? undefined,
             currency: 'USD',
-            areaUnit: 'sqm',
-            pricePerNight: room?.pricePerNight || 0,
+
+            // Restrictions
+            minStayNights: room?.minStayNights ?? undefined,
+            maxStayNights: room?.maxStayNights ?? undefined,
+            advanceBookingDays: room?.advanceBookingDays ?? undefined,
+            cancellationPolicy: room?.cancellationPolicy ?? '',
+
+            // Features & Amenities
+            smokingAllowed: room?.smokingAllowed ?? false,
+            petFriendly: room?.petFriendly ?? false,
+            wheelchairAccessible: room?.wheelchairAccessible ?? false,
+            elevatorAccess: room?.elevatorAccess ?? false,
+            amenities: room?.amenities ?? [],
+            customAmenities: room?.customAmenities ?? [],
+
+            // Status & Maintenance
+            roomStatus: (room?.roomStatus as RoomStatus) ?? undefined,
+            housekeepingStatus: room?.housekeepingStatus ?? '',
+            maintenanceNotes: room?.maintenanceNotes ?? '',
+            outOfOrderReason: room?.outOfOrderReason ?? '',
+            outOfOrderUntil: room?.outOfOrderUntil ?? '',
+
+            // Additional Information
+            description: room?.description ?? '',
+            internalNotes: room?.internalNotes ?? '',
+            guestNotes: room?.guestNotes ?? '',
+            specialInstructions: room?.specialInstructions ?? '',
         },
     });
 
     useEffect(() => {
         if (room) {
             form.reset({
-                roomNumber: room.roomNumber,
-                roomType: room.roomType || '', // Dynamic room type code
-                floor: room.floor,
-                bedCount: room.bedCount,
-                occupancy: room.occupancy || 1,
-                area: room.area,
-                maxAdults: room.maxAdults,
-                maxChildren: room.maxChildren,
-                viewType: room.viewType || '',
-                smokingAllowed: room.smokingAllowed ?? false,
+                // Basic Information
+                roomNumber: room.roomNumber ?? '',
+                roomType: room.roomType ?? '', // Dynamic room type code
+                roomCategory: room.roomCategory ?? '',
+                floor: room.floor ?? 0,
+                wing: room.wing ?? '',
+                section: room.section ?? '',
+                building: room.building ?? '',
+
+                // Physical Attributes
+                area: room.area ?? undefined,
+                areaUnit: room.areaUnit ?? 'sqm',
+                bedCount: room.bedCount ?? 1,
+                bedType: room.bedType ?? '',
+                bedConfiguration: room.bedConfiguration ?? '',
+                viewType: room.viewType ?? '',
+                balcony: room.balcony ?? false,
+                terrace: room.terrace ?? false,
+                connectingRoom: room.connectingRoom ?? 'None',
+                connectingRoomNumber: room.connectingRoomNumber ?? '',
+
+                // Capacity
+                occupancy: room.occupancy ?? 1,
+                maxAdults: room.maxAdults ?? undefined,
+                maxChildren: room.maxChildren ?? undefined,
+                maxInfants: room.maxInfants ?? undefined,
                 extraBedAvailable: room.extraBedAvailable ?? false,
-                extraBedPrice: room.extraBedPrice,
-                minStayNights: room.minStayNights,
-                maxStayNights: room.maxStayNights,
-                weekendPricePerNight: room.weekendPricePerNight,
-                seasonalPricePerNight: room.seasonalPricePerNight,
-                wheelchairAccessible: room.wheelchairAccessible ?? false,
-                description: room.description || '',
-                maintenanceNotes: room.maintenanceNotes || '',
-                amenities: room.amenities || [],
-                roomStatus: (room.roomStatus as RoomStatus) || undefined,
+                extraBedCount: room.extraBedCount ?? undefined,
+                extraBedPrice: room.extraBedPrice ?? undefined,
+                cribAvailable: room.cribAvailable ?? false,
+                cribPrice: room.cribPrice ?? undefined,
+
+                // Pricing
+                pricePerNight: room.pricePerNight ?? 0,
+                weekendPricePerNight: room.weekendPricePerNight ?? undefined,
+                seasonalPricePerNight: room.seasonalPricePerNight ?? undefined,
+                holidayPricePerNight: room.holidayPricePerNight ?? undefined,
                 currency: 'USD',
-                areaUnit: 'sqm',
-                pricePerNight: room.pricePerNight || 0,
+
+                // Restrictions
+                minStayNights: room.minStayNights ?? undefined,
+                maxStayNights: room.maxStayNights ?? undefined,
+                advanceBookingDays: room.advanceBookingDays ?? undefined,
+                cancellationPolicy: room.cancellationPolicy ?? '',
+
+                // Features & Amenities
+                smokingAllowed: room.smokingAllowed ?? false,
+                petFriendly: room.petFriendly ?? false,
+                wheelchairAccessible: room.wheelchairAccessible ?? false,
+                elevatorAccess: room.elevatorAccess ?? false,
+                amenities: room.amenities ?? [],
+                customAmenities: room.customAmenities ?? [],
+
+                // Status & Maintenance
+                roomStatus: (room.roomStatus as RoomStatus) ?? undefined,
+                housekeepingStatus: room.housekeepingStatus ?? '',
+                maintenanceNotes: room.maintenanceNotes ?? '',
+                outOfOrderReason: room.outOfOrderReason ?? '',
+                outOfOrderUntil: room.outOfOrderUntil ?? '',
+
+                // Additional Information
+                description: room.description ?? '',
+                internalNotes: room.internalNotes ?? '',
+                guestNotes: room.guestNotes ?? '',
+                specialInstructions: room.specialInstructions ?? '',
             });
         }
     }, [room, form]);
@@ -186,6 +270,7 @@ export const RoomForm: React.FC<RoomFormProps> = ({room, onSuccess, onCancel}) =
                 description: data.description || undefined,
                 maintenanceNotes: data.maintenanceNotes || undefined,
                 amenities: data.amenities && data.amenities.length > 0 ? data.amenities : undefined,
+                customAmenities: data.customAmenities && data.customAmenities.length > 0 ? data.customAmenities : undefined,
                 roomStatus: data.roomStatus,
             };
             
@@ -252,6 +337,9 @@ export const RoomForm: React.FC<RoomFormProps> = ({room, onSuccess, onCancel}) =
                 <FormPanel title="Features & Amenities" description="Room features and available amenities">
                     <FormSection>
                         <FeaturesSection control={form.control} />
+                        <div className="mt-6 pt-6 border-t">
+                            <CustomAmenitiesSection control={form.control} />
+                        </div>
                     </FormSection>
                 </FormPanel>
 

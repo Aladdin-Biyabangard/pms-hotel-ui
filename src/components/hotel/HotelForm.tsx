@@ -90,27 +90,27 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
     const form = useForm<HotelFormValues>({
         resolver: zodResolver(hotelSchema),
         defaultValues: {
-            name: hotel?.name || '',
-            address: hotel?.address || '',
-            city: hotel?.city || '',
-            state: hotel?.state || '',
-            country: hotel?.country || '',
-            zipCode: hotel?.zipCode || '',
-            phoneNumber: hotel?.phoneNumber || '',
-            email: hotel?.email || '',
-            description: hotel?.description || '',
-            starRating: hotel?.starRating,
-            checkInTime: hotel?.checkInTime || '14:00',
-            checkOutTime: hotel?.checkOutTime || '11:00',
-            policies: hotel?.policies || '',
-            facilities: hotel?.facilities || [],
-            website: hotel?.website || '',
-            timezone: hotel?.timezone || 'UTC',
-            totalRooms: hotel?.totalRooms,
-            totalFloors: hotel?.totalFloors,
-            cancellationPolicy: hotel?.cancellationPolicy || '',
-            taxRate: hotel?.taxRate,
-            serviceChargeRate: hotel?.serviceChargeRate,
+            name: hotel?.name ?? '',
+            address: hotel?.address ?? '',
+            city: hotel?.city ?? '',
+            state: hotel?.state ?? '',
+            country: hotel?.country ?? '',
+            zipCode: hotel?.zipCode ?? '',
+            phoneNumber: hotel?.phoneNumber ?? '',
+            email: hotel?.email ?? '',
+            description: hotel?.description ?? '',
+            starRating: hotel?.starRating ?? undefined,
+            checkInTime: hotel?.checkInTime ?? '14:00',
+            checkOutTime: hotel?.checkOutTime ?? '11:00',
+            policies: hotel?.policies ?? '',
+            facilities: hotel?.facilities ?? [],
+            website: hotel?.website ?? '',
+            timezone: hotel?.timezone ?? 'UTC',
+            totalRooms: hotel?.totalRooms ?? undefined,
+            totalFloors: hotel?.totalFloors ?? undefined,
+            cancellationPolicy: hotel?.cancellationPolicy ?? '',
+            taxRate: hotel?.taxRate ?? undefined,
+            serviceChargeRate: hotel?.serviceChargeRate ?? undefined,
         },
     });
 
@@ -336,7 +336,7 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
                                         <FormLabel>Star Rating</FormLabel>
                                         <Select
                                             onValueChange={(value) => field.onChange(parseInt(value, 10))}
-                                            value={field.value?.toString()}
+                                            value={field.value ? field.value.toString() : undefined}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
@@ -459,6 +459,7 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
                                                 type="number"
                                                 placeholder="100"
                                                 {...field}
+                                                value={field.value ?? ''}
                                                 onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : undefined)}
                                             />
                                         </FormControl>
@@ -478,6 +479,7 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
                                                 type="number"
                                                 placeholder="10"
                                                 {...field}
+                                                value={field.value ?? ''}
                                                 onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : undefined)}
                                             />
                                         </FormControl>
@@ -498,6 +500,7 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
                                                 step="0.01"
                                                 placeholder="10.00"
                                                 {...field}
+                                                value={field.value ?? ''}
                                                 onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
                                             />
                                         </FormControl>
@@ -519,6 +522,7 @@ export const HotelForm: React.FC<HotelFormProps> = ({hotel, onSuccess, onCancel}
                                                 step="0.01"
                                                 placeholder="5.00"
                                                 {...field}
+                                                value={field.value ?? ''}
                                                 onChange={(e) => field.onChange(e.target.value ? parseFloat(e.target.value) : undefined)}
                                             />
                                         </FormControl>

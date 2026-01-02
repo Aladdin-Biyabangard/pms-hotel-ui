@@ -123,6 +123,7 @@ export interface CreateRoomRequest {
     description?: string;
     maintenanceNotes?: string;
     amenities?: string[];
+    customAmenities?: string[];
     roomStatus?: string; // RoomStatus enum value
 }
 
@@ -148,6 +149,7 @@ export interface UpdateRoomRequest {
     description?: string;
     maintenanceNotes?: string;
     amenities?: string[];
+    customAmenities?: string[];
     mainImageUrl?: string;
     roomStatus?: string; // RoomStatus enum value
 }
@@ -177,6 +179,7 @@ export interface RoomResponse {
     description?: string;
     maintenanceNotes?: string;
     amenities?: string[];
+    customAmenities?: string[];
     createdAt: string;
     updatedAt: string;
     photoUrls?: string[];

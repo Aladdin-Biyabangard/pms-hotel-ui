@@ -49,7 +49,8 @@ export function PhysicalAttributesSection({control}: PhysicalAttributesSectionPr
                 type="number"
                 placeholder="1"
                 {...field}
-                onChange={(e) => field.onChange(parseInt(e.target.value, 10) || 1)}
+                value={field.value ?? ''}
+                onChange={(e) => field.onChange(e.target.value ? parseInt(e.target.value, 10) : 1)}
               />
             </FormControl>
             <FormMessage />
