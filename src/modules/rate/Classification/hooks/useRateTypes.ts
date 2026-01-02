@@ -4,24 +4,40 @@ import { CreateRateTypeRequest, RateTypeResponse, rateTypesApi, UpdateRateTypeRe
 
 export interface UseRateTypesOptions {
   autoLoad?: boolean;
+  enablePagination?: boolean;
 }
 
-export const useRateTypes = ({ autoLoad = true }: UseRateTypesOptions = {}) => {
+export const useRateTypes = ({ autoLoad = true, enablePagination = false }: UseRateTypesOptions = {}) => {
   const [rateTypes, setRateTypes] = useState<RateTypeResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10);
 
   const loadRateTypes = useCallback(async (params?: {
     code?: string;
     name?: string;
     status?: string;
+    page?: number;
+    size?: number;
   }) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await rateTypesApi.getAll(0, 1000, params);
-      setRateTypes(response.content);
+      const page = params?.page ?? (enablePagination ? currentPage : 0);
+      const size = params?.size ?? (enablePagination ? pageSize : 1000);
+      const response = await rateTypesApi.getAll(page, size, params);
+
+      if (enablePagination) {
+        setRateTypes(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      } else {
+        // For non-paginated mode, load all data
+        setRateTypes(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      }
     } catch (err) {
       const errorMessage = 'Failed to load rate types';
       setError(errorMessage);
@@ -30,7 +46,7 @@ export const useRateTypes = ({ autoLoad = true }: UseRateTypesOptions = {}) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [enablePagination, currentPage, pageSize]);
 
   const createRateType = useCallback(async (data: CreateRateTypeRequest) => {
     try {
@@ -79,11 +95,29 @@ export const useRateTypes = ({ autoLoad = true }: UseRateTypesOptions = {}) => {
     }
   }, []);
 
+  // Pagination functions
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const refreshCurrentPage = useCallback(() => {
+    loadRateTypes();
+  }, [loadRateTypes]);
+
   useEffect(() => {
     if (autoLoad) {
       loadRateTypes();
     }
   }, [autoLoad, loadRateTypes]);
+
+  // Reload when page changes (for paginated mode)
+  useEffect(() => {
+    if (enablePagination && autoLoad) {
+      loadRateTypes();
+    }
+  }, [currentPage, enablePagination, autoLoad, loadRateTypes]);
+
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   return {
     rateTypes,
@@ -95,5 +129,12 @@ export const useRateTypes = ({ autoLoad = true }: UseRateTypesOptions = {}) => {
     deleteRateType,
     getRateTypeById,
     setRateTypes, // For manual state updates if needed
+    // Pagination data
+    currentPage,
+    pageSize,
+    totalElements,
+    totalPages,
+    handlePageChange,
+    refreshCurrentPage,
   };
 };

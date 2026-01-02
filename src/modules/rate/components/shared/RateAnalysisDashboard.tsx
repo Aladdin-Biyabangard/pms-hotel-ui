@@ -190,7 +190,7 @@ export function RateAnalysisDashboard({ initialDateRange }: RateAnalysisDashboar
   // Stats by room type
   const roomTypeStats = useMemo((): RoomTypeStats[] => {
     return roomTypes.map(roomType => {
-      const typeRates = rates.filter(r => r.roomTypeResponse?.id === roomType.id || r.roomType?.id === roomType.id);
+      const typeRates = rates.filter(r => r.roomTypeResponse?.id === roomType.id);
       if (typeRates.length === 0) {
         return {
           roomType,

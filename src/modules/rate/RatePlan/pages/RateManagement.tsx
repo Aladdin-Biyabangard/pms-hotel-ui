@@ -2,13 +2,15 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import {PageWrapper} from '@/components/layout/PageWrapper';
 import {Button} from '@/components/ui/button';
 import {RateManagementDashboard} from '../..';
-import {Calendar, FileText, FolderTree, Layers, LayoutDashboard, Package, TrendingUp} from 'lucide-react';
+import {Calendar, FileText, FolderTree, Layers, LayoutDashboard, Package, TrendingUp, GitCompare} from 'lucide-react';
 import {cn} from '@/lib/utils';
 
 const navigationItems = [
   { path: '/rate-management', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/rate-plan-analysis', label: 'Analysis', icon: TrendingUp },
   { path: '/rate-matrix', label: 'Rate Calendar', icon: Calendar },
   { path: '/rate-plans', label: 'Rate Plans', icon: FileText },
+  { path: '/rate-plans/compare', label: 'Compare', icon: GitCompare },
   { path: '/rate-tiers', label: 'Rate Tiers', icon: Layers },
   { path: '/rate-package-components', label: 'Package Components', icon: Package },
   { path: '/rate-classification', label: 'Classification', icon: FolderTree },

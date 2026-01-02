@@ -11,6 +11,7 @@ import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
 import {EntityStatus} from '@/types/enums';
 import {Skeleton} from '@/components/ui/skeleton';
+import {Pagination} from '@/components/ui/pagination';
 
 interface RoomTypeListProps {
   onEdit?: (roomType: RoomTypeResponse) => void;
@@ -291,29 +292,12 @@ export function RoomTypeList({ onEdit, onDelete, onCreate, onView }: RoomTypeLis
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="text-sm text-muted-foreground">
-                        Page {currentPage + 1} of {totalPages}
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                            disabled={currentPage === 0 || isLoading}
-                        >
-                          Previous
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                            disabled={currentPage >= totalPages - 1 || isLoading}
-                        >
-                          Next
-                        </Button>
-                      </div>
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        showPageNumbers={false}
+                    />
                 )}
               </>
           )}

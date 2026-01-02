@@ -58,7 +58,7 @@ export function RoomRateForm({
     resolver: zodResolver(roomRateSchema),
     defaultValues: {
       ratePlanCode: initialData?.ratePlan?.code || '',
-      roomTypeCode: initialData?.roomType?.code || '',
+      roomTypeCode: initialData?.roomTypeResponse?.code || '',
       rateDate: initialData?.rateDate || defaultDate || format(new Date(), 'yyyy-MM-dd'),
       rateAmount: initialData?.rateAmount || 0,
       currency: initialData?.currency || 'USD',
@@ -80,7 +80,7 @@ export function RoomRateForm({
       if (initialData) {
         form.reset({
           ratePlanCode: initialData.ratePlan?.code || '',
-          roomTypeCode: initialData.roomType?.code || '',
+          roomTypeCode: initialData.roomTypeResponse?.code || '',
           rateDate: initialData.rateDate,
           rateAmount: initialData.rateAmount,
           currency: initialData.currency || 'USD',

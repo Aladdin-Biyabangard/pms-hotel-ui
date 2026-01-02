@@ -11,6 +11,7 @@ import {useNavigate} from 'react-router-dom';
 import {Edit, Eye, Plus, Search, Trash2, User, X} from 'lucide-react';
 import {Badge} from '@/components/ui/badge';
 import {GuestType} from '@/types/enums';
+import {Pagination} from '@/components/ui/pagination';
 
 const GUEST_TYPE_OPTIONS = [
     { value: 'all', label: 'All Types' },
@@ -338,29 +339,12 @@ const Guests: React.FC = () => {
 
                 {/* Pagination */}
                 {!isLoading && guests.length > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Page {currentPage + 1} of {totalPages || 1}
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                                disabled={currentPage === 0 || isLoading}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={guests.length < pageSize || isLoading}
-                            >
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        showPageNumbers={false}
+                    />
                 )}
 
                 {/* Delete Confirmation Dialog */}

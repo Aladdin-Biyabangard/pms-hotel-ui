@@ -14,6 +14,7 @@ import {ConfirmDialog} from '@/components/staff/ConfirmDialog';
 import {RegisterRequest} from '@/api/auth';
 import {EntityStatus} from '@/types/enums';
 import {Plus, Power, PowerOff, Search, Trash2, UserCog, X,} from 'lucide-react';
+import {Pagination} from '@/components/ui/pagination';
 
 const STATUS_OPTIONS = [
     { value: 'all', label: 'All Statuses' },
@@ -392,29 +393,12 @@ const EmployeeManagement: React.FC = () => {
 
                 {/* Pagination */}
                 {!isLoading && users.length > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Page {currentPage + 1} of {totalPages || 1}
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                                disabled={currentPage === 0 || isLoading}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={users.length < pageSize || isLoading}
-                            >
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        showPageNumbers={false}
+                    />
                 )}
 
                 {/* Modals */}

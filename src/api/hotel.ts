@@ -2,10 +2,11 @@ import {api} from './axios';
 import {EntityStatus} from '@/types/enums';
 
 export interface CustomPage<T> {
-    content: T[];
-    page: number;
-    size: number;
-    totalElements?: number;
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 export interface RoomCriteria {

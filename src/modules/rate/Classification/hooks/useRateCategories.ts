@@ -4,24 +4,40 @@ import { CreateRateCategoryRequest, rateCategoriesApi, RateCategoryResponse, Upd
 
 export interface UseRateCategoriesOptions {
   autoLoad?: boolean;
+  enablePagination?: boolean;
 }
 
-export const useRateCategories = ({ autoLoad = true }: UseRateCategoriesOptions = {}) => {
+export const useRateCategories = ({ autoLoad = true, enablePagination = false }: UseRateCategoriesOptions = {}) => {
   const [rateCategories, setRateCategories] = useState<RateCategoryResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10);
 
   const loadRateCategories = useCallback(async (params?: {
     code?: string;
     name?: string;
     status?: string;
+    page?: number;
+    size?: number;
   }) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await rateCategoriesApi.getAll(0, 1000, params);
-      setRateCategories(response.content);
+      const page = params?.page ?? (enablePagination ? currentPage : 0);
+      const size = params?.size ?? (enablePagination ? pageSize : 1000);
+      const response = await rateCategoriesApi.getAll(page, size, params);
+
+      if (enablePagination) {
+        setRateCategories(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      } else {
+        // For non-paginated mode, load all data
+        setRateCategories(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      }
     } catch (err) {
       const errorMessage = 'Failed to load rate categories';
       setError(errorMessage);
@@ -30,7 +46,7 @@ export const useRateCategories = ({ autoLoad = true }: UseRateCategoriesOptions 
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [enablePagination, currentPage, pageSize]);
 
   const createRateCategory = useCallback(async (data: CreateRateCategoryRequest) => {
     try {
@@ -79,11 +95,29 @@ export const useRateCategories = ({ autoLoad = true }: UseRateCategoriesOptions 
     }
   }, []);
 
+  // Pagination functions
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const refreshCurrentPage = useCallback(() => {
+    loadRateCategories();
+  }, [loadRateCategories]);
+
   useEffect(() => {
     if (autoLoad) {
       loadRateCategories();
     }
   }, [autoLoad, loadRateCategories]);
+
+  // Reload when page changes (for paginated mode)
+  useEffect(() => {
+    if (enablePagination && autoLoad) {
+      loadRateCategories();
+    }
+  }, [currentPage, enablePagination, autoLoad, loadRateCategories]);
+
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   return {
     rateCategories,
@@ -95,5 +129,12 @@ export const useRateCategories = ({ autoLoad = true }: UseRateCategoriesOptions 
     deleteRateCategory,
     getRateCategoryById,
     setRateCategories, // For manual state updates if needed
+    // Pagination data
+    currentPage,
+    pageSize,
+    totalElements,
+    totalPages,
+    handlePageChange,
+    refreshCurrentPage,
   };
 };

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { RateCategoryResponse, rateCategoriesApi } from '../../api/rateCategory.api';
 import { useRateCategories } from '../../hooks/useRateCategories';
 import { useRateCategoryFilters } from '../../hooks/useRateCategoryFilters';
+import { Pagination } from '@/components/ui/pagination';
 
 interface RateCategoryListProps {
   onEdit?: (rateCategory: RateCategoryResponse) => void;
@@ -17,7 +18,17 @@ interface RateCategoryListProps {
 }
 
 export function RateCategoryList({ onEdit, onDelete, onCreate }: RateCategoryListProps) {
-  const { rateCategories, isLoading } = useRateCategories();
+  const {
+    rateCategories,
+    isLoading,
+    currentPage,
+    totalPages,
+    totalElements,
+    handlePageChange,
+    refreshCurrentPage
+  } = useRateCategories({ enablePagination: true });
+
+  // For client-side filtering, we use all data but show paginated results
   const { filters, updateFilter, clearFilters, filteredRateCategories, hasActiveFilters } = useRateCategoryFilters(rateCategories);
 
   const handleDelete = async (rateCategory: RateCategoryResponse) => {
@@ -28,9 +39,7 @@ export function RateCategoryList({ onEdit, onDelete, onCreate }: RateCategoryLis
     try {
       await rateCategoriesApi.delete(rateCategory.id);
       toast.success('Rate category deleted successfully');
-      // Refresh the data
-      const response = await rateCategoriesApi.getAll(0, 1000);
-      setRateCategories(response.content);
+      refreshCurrentPage();
       onDelete?.(rateCategory);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete rate category');
@@ -54,7 +63,7 @@ export function RateCategoryList({ onEdit, onDelete, onCreate }: RateCategoryLis
           <div>
             <CardTitle>Rate Categories</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              {filteredRateCategories.length} of {rateCategories.length} rate categor(ies)
+              {filteredRateCategories.length} of {totalElements} rate categor{totalElements !== 1 ? 'ies' : 'y'}
             </p>
           </div>
         </div>
@@ -164,6 +173,16 @@ export function RateCategoryList({ onEdit, onDelete, onCreate }: RateCategoryLis
               </TableBody>
             </Table>
           </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            showPageNumbers={false}
+          />
         )}
       </CardContent>
     </Card>

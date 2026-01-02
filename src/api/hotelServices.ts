@@ -2,10 +2,11 @@ import {api} from './axios';
 import {CurrencyCode, EntityStatus, ServiceType} from '@/types/enums';
 
 export interface CustomPage<T> {
-    content: T[];
-    page: number;
-    size: number;
-    totalElements?: number;
+  content: T[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 export interface HotelServiceResponse {

@@ -217,9 +217,9 @@ export function RateMatrixView({ onEditRate, onBulkUpdate }: RateMatrixViewProps
       const rate = Array.from(rates.values()).find(r => {
         const ratePlan = ratePlans.find(rp => rp.id === parseInt(key.split('-')[0]));
         const roomType = roomTypes.find(rt => rt.id === parseInt(key.split('-')[1]));
-        return rate && ratePlan && roomType && 
+        return rate && ratePlan && roomType &&
                rate.ratePlan?.code === ratePlan.code &&
-               rate.roomType?.code === roomType.code &&
+               rate.roomTypeResponse?.code === roomType.code &&
                rate.rateDate === key.split('-')[2];
       });
       if (rate) {

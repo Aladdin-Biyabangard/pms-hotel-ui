@@ -13,6 +13,7 @@ import {useNavigate} from 'react-router-dom';
 import {Plus, Search, X} from 'lucide-react';
 import {useAuth} from '@/context/AuthContext';
 import {canManageRooms} from '@/utils/roleUtils';
+import {Pagination} from '@/components/ui/pagination';
 
 const ROOM_STATUS_OPTIONS = [
     { value: 'all', label: 'All Statuses' },
@@ -241,29 +242,12 @@ const Rooms: React.FC = () => {
 
                 {/* Pagination */}
                 {!isLoading && rooms.length > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Page {currentPage + 1} of {totalPages || 1}
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                                disabled={currentPage === 0 || isLoading}
-                            >
-                                Previous
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={rooms.length < pageSize || isLoading}
-                            >
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        showPageNumbers={false}
+                    />
                 )}
 
                 {/* Delete Confirmation Dialog */}

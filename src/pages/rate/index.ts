@@ -10,4 +10,5 @@ export { default as CreateRateOverride } from './CreateRateOverride';
 export { default as BulkRateUpdate } from './BulkRateUpdate';
 export { default as RateMatrix } from './RateMatrix';
 export { default as AddDailyRate } from './AddDailyRate';
+export { default as RatePlanComparison } from './RatePlanComparison';
 

@@ -20,6 +20,7 @@ import {
 import {Edit, Filter, Package, Plus, Search, Trash2} from 'lucide-react';
 import {useToast} from '@/hooks/use-toast';
 import {CurrencyCode, EntityStatus, ServiceType} from '@/types/enums';
+import {Pagination} from '@/components/ui/pagination';
 
 const SERVICE_TYPE_OPTIONS = Object.values(ServiceType).map(type => ({
     value: type,
@@ -559,34 +560,12 @@ const HotelServices: React.FC = () => {
 
                 {/* Pagination */}
                 {!loading && services.length > 0 && (
-                    <div className="flex items-center justify-between">
-                        <div className="text-sm text-muted-foreground">
-                            Showing {currentPage * pageSize + 1} to {Math.min((currentPage + 1) * pageSize, totalElements)} of {totalElements} services
-                        </div>
-                        <div className="flex gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                                disabled={currentPage === 0 || loading}
-                            >
-                                Previous
-                            </Button>
-                            <div className="flex items-center gap-2">
-                                <span className="text-sm">
-                                    Page {currentPage + 1} of {totalPages || 1}
-                                </span>
-                            </div>
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setCurrentPage(currentPage + 1)}
-                                disabled={currentPage >= totalPages - 1 || loading}
-                            >
-                                Next
-                            </Button>
-                        </div>
-                    </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                        showPageNumbers={false}
+                    />
                 )}
             </div>
 

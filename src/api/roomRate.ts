@@ -63,7 +63,8 @@ export interface CustomPage<T> {
   content: T[];
   page: number;
   size: number;
-  totalElements?: number;
+  totalElements: number;
+  totalPages: number;
 }
 
 export const roomRateApi = {

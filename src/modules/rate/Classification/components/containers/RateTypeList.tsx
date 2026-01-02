@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { RateTypeResponse, rateTypesApi } from '../../api/rateType.api';
 import { useRateTypes } from '../../hooks/useRateTypes';
 import { useRateTypeFilters } from '../../hooks/useRateTypeFilters';
+import { Pagination } from '@/components/ui/pagination';
 
 interface RateTypeListProps {
   onEdit?: (rateType: RateTypeResponse) => void;
@@ -17,7 +18,17 @@ interface RateTypeListProps {
 }
 
 export function RateTypeList({ onEdit, onDelete, onCreate }: RateTypeListProps) {
-  const { rateTypes, isLoading } = useRateTypes();
+  const {
+    rateTypes,
+    isLoading,
+    currentPage,
+    totalPages,
+    totalElements,
+    handlePageChange,
+    refreshCurrentPage
+  } = useRateTypes({ enablePagination: true });
+
+  // For client-side filtering, we use all data but show paginated results
   const { filters, updateFilter, clearFilters, filteredRateTypes, hasActiveFilters } = useRateTypeFilters(rateTypes);
 
   const handleDelete = async (rateType: RateTypeResponse) => {
@@ -28,9 +39,7 @@ export function RateTypeList({ onEdit, onDelete, onCreate }: RateTypeListProps) 
     try {
       await rateTypesApi.delete(rateType.id);
       toast.success('Rate type deleted successfully');
-      // Refresh the data
-      const response = await rateTypesApi.getAll(0, 1000);
-      setRateTypes(response.content);
+      refreshCurrentPage();
       onDelete?.(rateType);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete rate type');
@@ -54,7 +63,7 @@ export function RateTypeList({ onEdit, onDelete, onCreate }: RateTypeListProps) 
           <div>
             <CardTitle>Rate Types</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              {filteredRateTypes.length} of {rateTypes.length} rate type(s)
+              {filteredRateTypes.length} of {totalElements} rate type{totalElements !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
@@ -164,6 +173,16 @@ export function RateTypeList({ onEdit, onDelete, onCreate }: RateTypeListProps) 
               </TableBody>
             </Table>
           </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            showPageNumbers={false}
+          />
         )}
       </CardContent>
     </Card>

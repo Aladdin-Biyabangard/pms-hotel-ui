@@ -4,25 +4,41 @@ import { CreateRateClassRequest, rateClassesApi, RateClassResponse, UpdateRateCl
 
 export interface UseRateClassesOptions {
   autoLoad?: boolean;
+  enablePagination?: boolean;
 }
 
-export const useRateClasses = ({ autoLoad = true }: UseRateClassesOptions = {}) => {
+export const useRateClasses = ({ autoLoad = true, enablePagination = false }: UseRateClassesOptions = {}) => {
   const [rateClasses, setRateClasses] = useState<RateClassResponse[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [totalElements, setTotalElements] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10);
 
   const loadRateClasses = useCallback(async (params?: {
     rateCategoryId?: number;
     code?: string;
     name?: string;
     status?: string;
+    page?: number;
+    size?: number;
   }) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await rateClassesApi.getAll(0, 1000, params);
-      setRateClasses(response.content);
+      const page = params?.page ?? (enablePagination ? currentPage : 0);
+      const size = params?.size ?? (enablePagination ? pageSize : 1000);
+      const response = await rateClassesApi.getAll(page, size, params);
+
+      if (enablePagination) {
+        setRateClasses(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      } else {
+        // For non-paginated mode, load all data
+        setRateClasses(response.content);
+        setTotalElements(response.totalElements || response.content.length);
+      }
     } catch (err) {
       const errorMessage = 'Failed to load rate classes';
       setError(errorMessage);
@@ -31,7 +47,7 @@ export const useRateClasses = ({ autoLoad = true }: UseRateClassesOptions = {}) 
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [enablePagination, currentPage, pageSize]);
 
   const createRateClass = useCallback(async (data: CreateRateClassRequest) => {
     try {
@@ -80,11 +96,29 @@ export const useRateClasses = ({ autoLoad = true }: UseRateClassesOptions = {}) 
     }
   }, []);
 
+  // Pagination functions
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  const refreshCurrentPage = useCallback(() => {
+    loadRateClasses();
+  }, [loadRateClasses]);
+
   useEffect(() => {
     if (autoLoad) {
       loadRateClasses();
     }
   }, [autoLoad, loadRateClasses]);
+
+  // Reload when page changes (for paginated mode)
+  useEffect(() => {
+    if (enablePagination && autoLoad) {
+      loadRateClasses();
+    }
+  }, [currentPage, enablePagination, autoLoad, loadRateClasses]);
+
+  const totalPages = Math.ceil(totalElements / pageSize);
 
   return {
     rateClasses,
@@ -96,5 +130,12 @@ export const useRateClasses = ({ autoLoad = true }: UseRateClassesOptions = {}) 
     deleteRateClass,
     getRateClassById,
     setRateClasses, // For manual state updates if needed
+    // Pagination data
+    currentPage,
+    pageSize,
+    totalElements,
+    totalPages,
+    handlePageChange,
+    refreshCurrentPage,
   };
 };

@@ -158,14 +158,6 @@ export const Sidebar = ({ isDarkMode, onToggleDarkMode }: SidebarProps) => {
       ],
     },
     {
-      group: "Package Analytics",
-      items: [
-        { to: "/package-performance", icon: BarChart3, label: "Package Performance" },
-        { to: "/package-comparison", icon: Workflow, label: "Package Comparison" },
-        { to: "/package-revenue", icon: Target, label: "Revenue Analytics" },
-      ],
-    },
-    {
       group: "Administration",
       items: [
         { to: "/revenue", icon: DollarSign, label: "Revenue Management" },

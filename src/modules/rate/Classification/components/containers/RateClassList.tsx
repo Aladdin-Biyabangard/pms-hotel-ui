@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { RateClassResponse, rateClassesApi } from '../../api/rateClass.api';
 import { useRateClasses } from '../../hooks/useRateClasses';
 import { useRateClassFilters } from '../../hooks/useRateClassFilters';
+import { Pagination } from '@/components/ui/pagination';
 
 interface RateClassListProps {
   onEdit?: (rateClass: RateClassResponse) => void;
@@ -17,7 +18,17 @@ interface RateClassListProps {
 }
 
 export function RateClassList({ onEdit, onDelete, onCreate }: RateClassListProps) {
-  const { rateClasses, isLoading } = useRateClasses();
+  const {
+    rateClasses,
+    isLoading,
+    currentPage,
+    totalPages,
+    totalElements,
+    handlePageChange,
+    refreshCurrentPage
+  } = useRateClasses({ enablePagination: true });
+
+  // For client-side filtering, we use all data but show paginated results
   const { filters, updateFilter, clearFilters, filteredRateClasses, hasActiveFilters } = useRateClassFilters(rateClasses);
 
   const handleDelete = async (rateClass: RateClassResponse) => {
@@ -28,9 +39,7 @@ export function RateClassList({ onEdit, onDelete, onCreate }: RateClassListProps
     try {
       await rateClassesApi.delete(rateClass.id);
       toast.success('Rate class deleted successfully');
-      // Refresh the data
-      const response = await rateClassesApi.getAll(0, 1000);
-      setRateClasses(response.content);
+      refreshCurrentPage();
       onDelete?.(rateClass);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete rate class');
@@ -54,7 +63,7 @@ export function RateClassList({ onEdit, onDelete, onCreate }: RateClassListProps
           <div>
             <CardTitle>Rate Classes</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              {filteredRateClasses.length} of {rateClasses.length} rate class(es)
+              {filteredRateClasses.length} of {totalElements} rate class{totalElements !== 1 ? 'es' : ''}
             </p>
           </div>
         </div>
@@ -170,6 +179,16 @@ export function RateClassList({ onEdit, onDelete, onCreate }: RateClassListProps
               </TableBody>
             </Table>
           </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            showPageNumbers={false}
+          />
         )}
       </CardContent>
     </Card>

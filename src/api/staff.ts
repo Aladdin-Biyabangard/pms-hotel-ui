@@ -23,7 +23,8 @@ export interface CustomPage<T> {
     content: T[];
     pageNumber: number;
     pageSize: number;
-    totalElements?: number;
+    totalElements: number;
+    totalPages: number;
 }
 
 export const staffApi = {

@@ -11,6 +11,7 @@ import {ratePlanApi, RatePlanResponse} from '@/modules/rate/RatePlan';
 import {roomTypeApi, RoomTypeResponse} from '@/api/roomType';
 import {toast} from 'sonner';
 import {format} from 'date-fns';
+import {Pagination} from '@/components/ui/pagination';
 
 interface OverrideListProps {
   onEdit?: (override: RateOverrideResponse) => void;
@@ -31,9 +32,15 @@ export function OverrideList({ onEdit, onView, onDelete, onCreate }: OverrideLis
   const [ratePlans, setRatePlans] = useState<RatePlanResponse[]>([]);
   const [roomTypes, setRoomTypes] = useState<RoomTypeResponse[]>([]);
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pageSize] = useState(10);
+  const [totalElements, setTotalElements] = useState(0);
+  const totalPages = Math.ceil(totalElements / pageSize);
+
   useEffect(() => {
     loadData();
-  }, []);
+  }, [currentPage]);
 
   useEffect(() => {
     filterOverrides();
@@ -43,11 +50,12 @@ export function OverrideList({ onEdit, onView, onDelete, onCreate }: OverrideLis
     try {
       setIsLoading(true);
       const [overridesData, ratePlansData, roomTypesData] = await Promise.all([
-        rateOverrideApi.getAllRateOverrides(0, 1000),
+        rateOverrideApi.getAllRateOverrides(currentPage, pageSize),
         ratePlanApi.getAllRatePlans(0, 1000),
         roomTypeApi.getAllRoomTypes(0, 1000)
       ]);
       setOverrides(overridesData.content);
+      setTotalElements(overridesData.totalElements || overridesData.content.length);
       setRatePlans(ratePlansData.content);
       setRoomTypes(roomTypesData.content);
     } catch (error) {
@@ -129,6 +137,10 @@ export function OverrideList({ onEdit, onView, onDelete, onCreate }: OverrideLis
     return variants[type] || { variant: 'outline' as const, label: type };
   };
 
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   if (isLoading) {
     return (
       <Card>
@@ -146,7 +158,7 @@ export function OverrideList({ onEdit, onView, onDelete, onCreate }: OverrideLis
           <div>
             <CardTitle>Rate Overrides</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              {filteredOverrides.length} of {overrides.length} override(s)
+              {filteredOverrides.length} of {totalElements} override{totalElements !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
@@ -330,6 +342,16 @@ export function OverrideList({ onEdit, onView, onDelete, onCreate }: OverrideLis
               </TableBody>
             </Table>
           </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            showPageNumbers={false}
+          />
         )}
       </CardContent>
     </Card>

@@ -1,5 +1,6 @@
 import {api} from '@/api/axios';
 import {EntityStatus} from '@/types/enums';
+import {CustomPage} from '@/types/pagination';
 
 export interface RatePlanRestrictions {
   minGuests?: number;
@@ -92,12 +93,6 @@ export interface RatePlanRequest {
   rateClassId?: number;
 }
 
-export interface CustomPage<T> {
-  content: T[];
-  page: number;
-  size: number;
-  totalElements?: number;
-}
 
 export const ratePlanApi = {
   createRatePlan: async (data: RatePlanRequest): Promise<RatePlanResponse> => {

@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {PageWrapper} from "@/components/layout/PageWrapper";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Badge} from "@/components/ui/badge";
-import {ratePlanApi, RatePlanResponse} from "..";
+import {ratePlanApi, RatePlanResponse, RatePlanPageLayout, useTablePagination} from "../..";
+import {Pagination} from "@/components/ui/pagination";
 import {toast} from "sonner";
 import {ArrowLeft, Calendar, Edit, Eye, Plus, Search, Trash2, X} from "lucide-react";
 import {format} from "date-fns";
@@ -21,14 +21,24 @@ export default function RatePlans() {
   const [ratePlanToDelete, setRatePlanToDelete] = useState<RatePlanResponse | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalElements, setTotalElements] = useState(0);
-
   // Search state
   const [searchCode, setSearchCode] = useState('');
   const [searchName, setSearchName] = useState('');
+
+  // Track if there's a next page
+  const [hasNextPage, setHasNextPage] = useState(false);
+
+  // Pagination hook
+  const {
+    currentPage,
+    pageSize,
+    totalPages,
+    totalElements,
+    setPage,
+    setPageSize,
+    resetPagination,
+    updateTotalElements
+  } = useTablePagination();
 
   useEffect(() => {
     loadRatePlans();
@@ -36,11 +46,11 @@ export default function RatePlans() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setCurrentPage(0);
+      resetPagination();
       loadRatePlans();
     }, 300);
     return () => clearTimeout(timer);
-  }, [searchCode, searchName]);
+  }, [searchCode, searchName, resetPagination]);
 
   const loadRatePlans = async () => {
     try {
@@ -55,7 +65,13 @@ export default function RatePlans() {
 
       const data = await ratePlanApi.getAllRatePlans(currentPage, pageSize, params);
       setRatePlans(data.content);
-      setTotalElements(data.totalElements || 0);
+
+      // Determine if there's a next page by checking if we got a full page
+      setHasNextPage(data.content.length === pageSize);
+
+      // Update total elements for display (approximate)
+      const approximateTotal = (currentPage + 1) * pageSize + (data.content.length < pageSize ? 0 : pageSize);
+      updateTotalElements(approximateTotal);
     } catch (error: any) {
       console.error("Failed to load rate plans", error);
       toast.error(error?.response?.data?.message || "Failed to load rate plans");
@@ -88,12 +104,12 @@ export default function RatePlans() {
   };
 
   const hasFilters = searchCode || searchName;
-  const totalPages = Math.ceil(totalElements / pageSize);
 
   return (
-    <PageWrapper
+    <RatePlanPageLayout
       title="Rate Plans"
       subtitle="Manage rate plans and pricing"
+      isLoading={isLoading}
     >
       <div className="space-y-6">
         <div className="flex justify-between items-center">
@@ -137,7 +153,6 @@ export default function RatePlans() {
               </div>
               <Select value={pageSize.toString()} onValueChange={(value) => {
                 setPageSize(Number(value));
-                setCurrentPage(0);
               }}>
                 <SelectTrigger className="w-full sm:w-[120px]">
                   <SelectValue placeholder="Page size" />
@@ -251,31 +266,13 @@ export default function RatePlans() {
                   </TableBody>
                 </Table>
                 {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-between mt-4">
-                    <div className="text-sm text-muted-foreground">
-                      Page {currentPage + 1} of {totalPages}
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
-                        disabled={currentPage === 0 || isLoading}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                        disabled={currentPage >= totalPages - 1 || isLoading || ratePlans.length < pageSize}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  hasNextPage={hasNextPage}
+                  onPageChange={setPage}
+                  className="mt-4"
+                />
               </div>
             )}
             </div>
@@ -301,6 +298,6 @@ export default function RatePlans() {
           isLoading={isDeleting}
         />
       </div>
-    </PageWrapper>
+    </RatePlanPageLayout>
   );
 }

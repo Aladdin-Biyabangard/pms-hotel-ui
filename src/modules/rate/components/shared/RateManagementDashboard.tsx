@@ -368,7 +368,7 @@ export function RateManagementDashboard({ onNavigateToTab }: RateManagementDashb
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <p className="font-medium">
-                          {rate.roomType?.name || 'Unknown Room Type'}
+                          {rate.roomTypeResponse?.name || 'Unknown Room Type'}
                         </p>
                         {rate.stopSell && (
                           <Badge variant="destructive" className="text-xs">Stop</Badge>

@@ -27,7 +27,6 @@ import GuestDetailsPage from "./pages/guest/GuestDetails";
 import HotelServices from "./pages/hotel/HotelServices";
 import CalendarPage from "./pages/opera/CalendarPage";
 import WorkflowPage from "./pages/opera/WorkflowPage";
-import RevenuePage from "./pages/opera/RevenuePage";
 import HousekeepingPage from "./pages/opera/HousekeepingPage";
 import RateManagementPage from "./pages/opera/RateManagementPage";
 import { RatePlans, CreateRatePlan, EditRatePlan, RatePlanDetails, AssignRoomTypes, RateManagement } from "./modules/rate/RatePlan";
@@ -49,13 +48,12 @@ import {CreateRateOverride, EditRateOverride, RateOverrides} from "./modules/rat
 import BulkRateUpdate from "./pages/rate/BulkRateUpdate";
 import RateMatrix from "./pages/rate/RateMatrix";
 import AddDailyRate from "./pages/rate/AddDailyRate";
+import RatePlanAnalysis from "./pages/rate/RatePlanAnalysis";
+import RatePlanComparison from "./pages/rate/RatePlanComparison";
 import BillingPage from "./pages/opera/BillingPage";
 import ReportingPage from "./pages/opera/ReportingPage";
 import ChannelManagementPage from "./pages/opera/ChannelManagementPage";
 import MaintenancePage from "./pages/opera/MaintenancePage";
-import PackagePerformancePage from "./pages/opera/PackagePerformancePage";
-import PackageComparisonPage from "./pages/opera/PackageComparisonPage";
-import PackageRevenuePage from "./pages/opera/PackageRevenuePage";
 import PricingRules from "./pages/hotel/PricingRules";
 
 const queryClient = new QueryClient();
@@ -226,43 +224,10 @@ const App = () => (
               }
             />
             <Route
-              path="/revenue"
-              element={
-                <ProtectedRoute>
-                  <RevenuePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/housekeeping"
               element={
                 <ProtectedRoute>
                   <HousekeepingPage />
-                </ProtectedRoute>
-              }
-            />
-            {/* Opera Package Analysis Routes */}
-            <Route
-              path="/package-performance"
-              element={
-                <ProtectedRoute>
-                  <PackagePerformancePage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/package-comparison"
-              element={
-                <ProtectedRoute>
-                  <PackageComparisonPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/package-revenue"
-              element={
-                <ProtectedRoute>
-                  <PackageRevenuePage />
                 </ProtectedRoute>
               }
             />
@@ -279,6 +244,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <RateManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rate-plan-analysis"
+              element={
+                <ProtectedRoute>
+                  <RatePlanAnalysis />
                 </ProtectedRoute>
               }
             />
@@ -496,6 +469,15 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <AddDailyRate />
+                </ProtectedRoute>
+              }
+            />
+            {/* Rate Plan Comparison */}
+            <Route
+              path="/rate-plans/compare"
+              element={
+                <ProtectedRoute>
+                  <RatePlanComparison />
                 </ProtectedRoute>
               }
             />
